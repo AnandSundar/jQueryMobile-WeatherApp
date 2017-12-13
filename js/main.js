@@ -1,8 +1,27 @@
+$(document).ready(function () {
+  $('#settingsForm').on('submit', function (e) {
+    let settings = {
+      city: $('#city').val(),
+      state: $('#state').val()
+    }
+
+    saveSettings(settings);
+    e.preventDefault();
+  });
+});
+
+
+
 //runs before weather page/homepage
 $(document).on('pagecontainerbeforeshow', function (event, ui) {
   //check to see which page we are navigating to using the id
   if(ui.toPage[0].id == 'home'){
     getWeather(); //get the weather info from api
+  }
+
+  if(ui.toPage[0].id == 'settings'){
+    $('#city').val(getLocation().city);
+    $('#state').val(getLocation().state);
   }
 
 });
@@ -32,7 +51,7 @@ function getWeather(){
     <li><strong>Dewpoint: </strong>${weather.dewpoint_string}</li>
     <li><strong>Relative Humidity: </strong>${weather.relative_humidity}</li>
     <li><strong>Windchill: </strong>${weather.windchill_string}</li>
-    <li><strong>Visibility: </strong>${weather.visibility_mi} Miles</li>
+    <li><strong>Visibility: </strong>${weather.visibility_mi}</li>
     `;
 
     $('#weatherList').html(weatherList).listview('refresh');
@@ -40,6 +59,28 @@ function getWeather(){
 }
 
 function getLocation() {
-  let location = {city: 'Boston', state: 'MA'};
+let location;
+  if(localStorage.getItem('location') === null){
+    location = {city: 'Boston', state: 'MA'};
+  }else{
+      location = JSON.parse(localStorage.getItem('location'));
+  }
+
   return location;
+}
+
+function saveSettings(settings) {
+  //validation
+  if(settings.city =='' || settings.state == ''){
+    alert('Please fill in all fields');
+  }else{
+    let location = {
+      city: settings.city,
+      state: settings.state
+  }
+
+    //save the settings in localStorage
+    localStorage.setItem('location', JSON.stringify(location));
+    $.mobile.changePage('#home');
+  }
 }

@@ -8,5 +8,3 @@
 <li>jQuery Mobile</li>
 <li>wunderweather API</li>
 </ul>
-
-<h3>This project is currently under development</h3>
