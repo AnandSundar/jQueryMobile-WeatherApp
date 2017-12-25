@@ -29,8 +29,9 @@ $(document).on('pagecontainerbeforeshow', function (event, ui) {
 function getWeather(){
   let location = getLocation();
 
-  let city = location.city;
+  let city = location.split(' ').join('_');
   let state = location.state;
+
 
   $.ajax({
     url: 'http://api.wunderground.com/api/9bf1f7b0f5ca5c27/conditions/q/'+state+'/'+city+'.json'
